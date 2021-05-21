@@ -20,5 +20,24 @@ public class heap_Question {
         }
         return pq.remove()[0];
     }
+
+    //Grouping Values
+    static int isPossible(int N, int arr[], int K)
+    {
+        HashMap<Integer,Integer> map = new HashMap<>();
+        for(int ele:arr){
+            map.put(ele,map.getOrDefault(ele,0)+1);
+        }
+        
+        for(int key:map.keySet()){
+            if(map.get(key)>2*K){
+                return 0;
+            }
+        }
+        return 1;
+    }
+
+    
 }
+
 
