@@ -498,6 +498,165 @@ public class heap_Question {
         }
         return maxDiff;
     }
+    // 3. Longest Substring Without Repeating Characters
+    public int lengthOfLongestSubstring(String s) {
+        int si=0,ei=0,len=0;
+        int[] freq = new int[128];
+        int count=0;
+        while(ei<s.length()){
+            if(freq[s.charAt(ei++)]++>0)   count++;
+            while(count>0){
+                if(freq[s.charAt(si++)]-->1) count--;
+            }
+            len = Math.max(len,ei-si);
+        }
+        return len;
+    }
+
+    //409. Longest Palindrome
+    public int longestPalindrome(String s) {
+        HashMap<Character,Integer> map = new HashMap<>();
+        int len=0;
+        for(int i=0;i<s.length();i++){
+            map.put(s.charAt(i),map.getOrDefault(s.charAt(i),0)+1);
+            if(map.get(s.charAt(i))==2){
+                len+=2;
+                map.put(s.charAt(i),0);
+            }
+        }
+        
+        return len==s.length()?len:len+1;
+    }
+
+    // Largest subarray with 0 sum 
+    int maxLen(int arr[], int n)
+    {
+        int maxLen=0;
+        int currSum=0;
+        HashMap<Integer,Integer> map = new HashMap<>();
+        for(int i=0;i<n;i++){
+            currSum+=arr[i];
+            if(currSum==0){
+                maxLen=i+1;
+            }
+            if(map.containsKey(currSum)){
+                maxLen=Math.max(maxLen,i-map.get(currSum));
+            }
+            if(!map.containsKey(currSum)){
+                map.put(currSum,i);
+            }
+
+        }
+        return maxLen;
+    }
+
+    // employees under manager
+    import java.io.*;
+import java.util.*;
+
+public class Main {
+
+  public static void main(String[] args) {
+    Scanner scn = new Scanner(System.in);
+    int n = Integer.parseInt(scn.nextLine());
+    String ceo = "";
+
+    HashMap<String, HashSet<String>> map = new HashMap<>();
+    for (int i = 0; i < n; i++) {
+      String[] parts = scn.nextLine().split(" ");
+      String emp = parts[0];
+      String man = parts[1];
+
+      if (man.equals(emp)) {
+        ceo = man;
+        continue;
+      }
+
+      if (map.containsKey(man)) {
+        HashSet<String> emps = map.get(man);
+        emps.add(emp);
+      } else {
+        HashSet<String> emps = new HashSet<>();
+        emps.add(emp);
+        map.put(man, emps);
+      }
+    }
+
+    HashMap<String, Integer> ans = new HashMap<>();
+    size(map, ceo, ans);
+
+    for (String emp : ans.keySet()) {
+      System.out.println(emp + " " + ans.get(emp));
+    }
+  }
+
+  public static int size(
+    HashMap<String, HashSet<String>> map,
+    String man,
+    HashMap<String, Integer> ans
+  ) {
+    if(map.containsKey(man) == false){
+      ans.put(man, 0);
+      return 1;
+    }
+
+    int sz = 0;
+    
+    for (String emp : map.get(man)) {
+      int cs = size(map, emp, ans);
+      sz += cs;
+    }
+    ans.put(man, sz);
+    return sz + 1;
+  }
+    // longest consecutive subsequence
+    public int longestConsecutive(int[] nums) {
+        HashSet<Integer> map = new HashSet<>();
+        for(int ele:nums) map.add(ele);
+        
+        int len=0;
+        for(int ele:nums){
+            if(!map.contains(ele)) continue;
+            map.remove(ele);
+            int prev=ele-1;
+            int next=ele+1;
+            while(map.contains(prev)){
+                map.remove(prev);
+                prev--;
+            }
+            while(map.contains(next)){
+                map.remove(next);
+                next++;
+            }
+            len=Math.max(len,next-prev-1);
+        }
+        return len;
+    }
+
+    //count the characeters
+    int getCount (String S, int N)
+    {
+        int[] freq = new int[26];
+        int i=0,j=1;
+        freq[S.charAt(i)-'a']++;
+        while(j<S.length()){
+            if(S.charAt(i)!=S.charAt(j)) freq[S.charAt(j)-'a']++;
+            i++;
+            j++;
+        }
+        
+        int count=0;
+        for(int k=0;k<26;k++){
+            if(freq[k]==N) count++;
+        }
+        return count;
+    }
 }
+
+
+                        
+            
+}
+
 
 
