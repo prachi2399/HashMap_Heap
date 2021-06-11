@@ -1,6 +1,70 @@
 public class heap_Question {
 
-    
+    // four sum
+    public List<List<Integer>> fourSum(int[] arr, int target) {
+          Arrays.sort(arr);
+        int n=arr.length;
+        List<List<Integer>> list=new ArrayList<>();
+        for(int i=0;i<n;i++){
+            while(i!=0&&i<n&&arr[i]==arr[i-1]) i++;
+            for(int l=i+1;l<n;l++){
+            while(l>i+1 &&l<n&&arr[l]==arr[l-1]) l++;    
+            int j=l+1,k=n-1;
+            while(j<k){
+                int sum=arr[i]+arr[j]+arr[k]+arr[l];
+                if(sum==target){
+                    list.add(Arrays.asList(arr[i],arr[l],arr[j],arr[k]));
+                    
+                    j++; k--;
+                    while(j<k&&arr[j]==arr[j-1]) j++;
+                    while(j<k&&arr[k]==arr[k+1]) k--;
+                }
+                else if(sum<target) j++;
+                else k--;
+             }
+          }
+        }
+        return list;
+    }
+
+    // 4 sum -ii
+    public int fourSumCount(int[] A, int[] B){
+        Arrays.sort(A);
+        Arrays.sort(B);
+        int i=0,j=B.length-1;
+        int ans=0;
+        while(i<A.length&&j>=0){
+            int sum = A[i]+B[j];
+            if(sum<0){
+                i++;
+            }else if(sum>0){
+                j--;
+            }else{
+                int countA=1,countB=1;
+                while(++i<A.length&&A[i]==A[i-1]) countA++;
+                while(--j>=0&&B[j]==B[j+1]) countB++;
+                ans+=countA*countB;
+                
+            }
+        }
+        return ans;
+        
+    }
+    public int fourSumCount(int[] A, int[] B, int[] C, int[] D) {
+        int n = A.length;
+        int[] AB=new int[n*n];
+        int[] CD = new int[n*n];
+        int k=0;
+        for(int i=0;i<n;i++){
+            for(int j=0;j<n;j++){
+                AB[k]=A[i]+B[j];
+                CD[k]=C[i]+D[j];
+                k++;
+            }
+        }
+        return fourSumCount(AB,CD);
+    }
+    //
     public int kthSmallest(int[][] matrix, int k) {
         PriorityQueue<int[]> pq = new PriorityQueue<>((a,b)->{
             return a[0]-b[0];
@@ -650,6 +714,31 @@ public class Main {
             if(freq[k]==N) count++;
         }
         return count;
+    }
+    // group anagram
+    public List<List<String>> groupAnagrams(String[] strs) {
+        HashMap<HashMap<Character,Integer>,List<String>> bmap = new HashMap<>();
+        
+        for(String s:strs){
+            HashMap<Character,Integer> fmap = new HashMap<>();
+            for(int i=0;i<s.length();i++){
+                char ch = s.charAt(i);
+                fmap.put(ch,fmap.getOrDefault(ch,0)+1);
+            }
+            if(bmap.containsKey(fmap)==false){
+                List<String> ans = new ArrayList<String>();
+                ans.add(s);
+                bmap.put(fmap,ans);
+            }else{
+                List<String> ans = bmap.get(fmap);
+                ans.add(s);
+            }   
+        }
+        List<List<String>> res = new ArrayList<>();
+        for(List<String> val:bmap.values()){
+            res.add(val);
+        }
+        return res;
     }
 }
 
